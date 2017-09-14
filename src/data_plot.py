@@ -29,7 +29,9 @@ rc('text', usetex=True)
 #data_name = "within_limits"
 #data_name = "no_intermediate_value"
 #data_name = "no_joint_limits_big_square"
-data_name = "nice_big_square"
+#data_name = "nice_big_square"
+#data_name = "fixed_point_no_intermediate_task"
+data_name = "fixed_point_nice_square"
 raw_data = "data/" + data_name + ".csv"
 
 global datum_timestamp
@@ -158,7 +160,7 @@ t = np.array(t_list)
 
 
 
-fig4 = plt.figure(4)
+fig4 = plt.figure(4, figsize=(5.5, 5.5))
 ax41 = plt.subplot2grid((1,1), (0,0))
 ax41.plot(head_cur_y, head_cur_z, linestyle='-', color='red', label='Head Y-Z actual',  linewidth=1.5)
 ax41.plot(reye_cur_y, reye_cur_z, linestyle='-', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Y-Z actual',  linewidth=1.5)	
@@ -178,8 +180,8 @@ ax41.legend(loc="lower center",ncol=2, prop={'size': 12})
 #ax41.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 ax41.set_xlim(-0.7, 0.7)
 ax41.set_ylim(-0.7, 0.7)
-#ax41.set_aspect('equal', adjustable='box')
-ax41.set_aspect('equal', 'datalim')
+ax41.set_aspect('equal', adjustable='box')
+#ax41.set_aspect('equal', 'datalim')
 #ax41.axis('equal')
 #ax41.grid('on')	
 
@@ -189,19 +191,19 @@ for item in ([ax41.title, ax41.xaxis.label, ax41.yaxis.label] +
 
 plt.tight_layout()
 
-fig5 = plt.figure(5)
+fig5 = plt.figure(5, figsize=(5.5, 3.0))
 ax42 = plt.subplot2grid((1,1), (0,0) )
 ax42.plot(t, head_cart_error, linestyle='-', color='red', label='Head', linewidth=1.5)
 ax42.plot(t, reye_cart_error, linestyle='--', marker='o', markersize=5.0, mew=1.0, markevery=10, color='green', label='Right Eye', linewidth=1.5)
 ax42.plot(t, leye_cart_error, linestyle='-', color='blue', label='Left Eye', linewidth=1.5)
 
-ax42.set_ylabel(r'Error $||\cdot||_2$')
+ax42.set_ylabel('Gaze Cartesian\nError $||\cdot||_2$', multialignment='center')
 ax42.set_ylim(-0.1, 0.4)
 ax42.set_xlabel(r'Time')
 
-ax42.title.set_text(r'Gaze Cartesian Error (2-Norm)')
+#ax42.title.set_text(r'Gaze Cartesian Error (2-Norm)')
 ax42.legend([r'Head Gaze Error', r'Right Eye Gaze Error', r'Left Eye Gaze Error'])
-ax42.legend(loc="lower right",ncol=3, prop={'size': 12})
+ax42.legend(loc="lower center",ncol=3, prop={'size': 12})
 
 #box = ax42.get_position()
 #ax42.set_position([box.x0, box.y0, box.width * 0.8, box.height])
@@ -210,13 +212,13 @@ ax42.legend(loc="lower right",ncol=3, prop={'size': 12})
 plt.tight_layout()
 
 
-fig6 = plt.figure(6)
+fig6 = plt.figure(6, figsize=(11.5, 3.5))
 
 ax43 = plt.subplot2grid((2,2), (0,0))
 ax43.plot(t, head_cur_y, linestyle='-', color='red', label='Head Gaze Y', linewidth=1.5)
 ax43.plot(t, head_des_y, linestyle='--', color='red', label='Head Des Gaze Y', linewidth=1.5)
 
-ax43.title.set_text(r'Head Gaze Position')
+ax43.title.set_text(r'Head Gaze Positions')
 ax43.set_ylabel('Y\nPosition (m)', multialignment='center')
 ax43.set_ylim(-0.8, 0.8)
 #ax43.legend(['H_cur gaze y', 'H_des gaze y','R_cur gaze y', 'R_des gaze y', 'Left Act Y', 'Left Des Y'])
@@ -228,7 +230,7 @@ ax432.plot(t, reye_des_y, linestyle='--', color='green', marker='x', markersize=
 ax432.plot(t, leye_cur_y, linestyle='-', color='blue', label='Left Eye Act Gaze Y',linewidth=1.5)
 ax432.plot(t, leye_des_y, linestyle='--', color='blue', label='Left Eye Des Gaze Y',linewidth=1.5)
 
-ax432.title.set_text(r'Eye Gaze Position')
+ax432.title.set_text(r'Eye Gaze Positions')
 #ax432.set_ylabel('Gaze Y\nPosition (m)', multialignment='center')
 ax432.set_ylim(-0.3, 0.3)
 
@@ -240,7 +242,7 @@ ax44.plot(t, head_des_z, linestyle='--', color='red', label='Desired Head Gaze',
 ax44.set_ylabel('Z\nPosition (m)', multialignment='center')
 ax44.set_ylim(-0.8, 0.8)
 ax44.legend(['H_cur gaze z', 'H_des gaze z', 'R_cur gaze z', 'R_des gaze z'])
-ax44.legend(loc="lower left", prop={'size': 12})
+ax44.legend(loc="lower left", ncol=2, prop={'size': 12})
 ax44.set_xlabel(r'Time (s)',fontsize=12)
 #box = ax44.get_position()
 # ax44.set_position([box.x0, box.y0, box.width * 0.8, box.height])
@@ -252,51 +254,59 @@ ax442.plot(t, reye_des_z, linestyle='--', color='green',  marker='x', markersize
 ax442.plot(t, leye_cur_z, linestyle='-', color='blue', label='Left Eye Actual',linewidth=1.5)
 ax442.plot(t, leye_des_z, linestyle='--', color='blue', label='Left Eye Desired',linewidth=1.5)
 
+ax442.set_xlabel(r'Time (s)',fontsize=12)
 #plt.title(r'Eye Gaze Position')
 #ax442.set_ylabel('Z\nPosition (m)', multialignment='center')
 ax442.set_ylim(-0.3, 0.3)
-ax442.legend(loc="lower left", ncol=1, prop={'size': 12})
+ax442.legend(loc="lower center", ncol=2, prop={'size': 12})
 
 # box = ax442.get_position()
 # ax442.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 # ax442.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-fig7 = plt.figure(7)
-ax45 = plt.subplot2grid((2,1), (0,0), colspan=2)
-ax45.plot(t, q4_list, linestyle='-', color='black', marker='s', markersize=5.0, mew=1.0, markevery=10, label=r'$q_o$ Eye Pitch Joint',linewidth=1.5)
-ax45.plot(t, q5_list, linestyle='--', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label=r'$q_1$ Right Eye Yaw',linewidth=1.5)
-ax45.plot(t, q6_list, linestyle='-', color='blue', label=r'$q_2$ Left Eye Yaw',linewidth=1.5)
-ax45.title.set_text(r'Eye Joint Positions')
-ax45.set_ylabel('Joint\nPosition (rads)', multialignment='center')
+
+
+fig7 = plt.figure(7, figsize=(11.5, 1.75))
+ax45 = plt.subplot2grid((1,1), (0,0), colspan=1)
+ax45.plot(t, q4_list, linestyle='-', color='black', marker='s', markersize=5.0, mew=1.0, markevery=10, label=r'$q_4$ Eye Pitch',linewidth=1.5)
+ax45.plot(t, q5_list, linestyle='--', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label=r'$q_5$ R Eye Yaw',linewidth=1.5)
+ax45.plot(t, q6_list, linestyle='-', color='blue', label=r'$q_6$ L Eye Yaw',linewidth=1.5)
+#ax45.title.set_text(r'Eye Joint Positions')
+ax45.set_ylabel('Eye Joint\nPosition (rads)', multialignment='center')
+ax45.set_xlabel(r'Time (s)')
+#ax45.get_xaxis().set_visible(False)
 ax45.set_ylim(-0.7, 0.7)
+ax45.legend(loc='upper right', prop={'size': 12})
+#ax45.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+#       ncol=3, mode="expand", borderaxespad=0., prop={'size':12})
 
-ax45.legend(loc="lower left", prop={'size': 12})
+#ax45.legend(bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
 
-ax46 = plt.subplot2grid((2,1), (1,0))
-ax46.plot(t, h1_list, linestyle='-', color='black',  marker='s', markersize=5.0, mew=1.0, markevery=10, label=r'$h_1$ Eye Pitch Activation Value',linewidth=1.5)
-ax46.plot(t, h2_list, linestyle='--', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label=r'$h_2$ Right Eye Yaw Activation Value',linewidth=1.5)
-ax46.plot(t, h3_list, linestyle='-', color='blue', label=r'$h_3$ Left Eye Yaw Activation Value',linewidth=1.5)
-ax46.legend(['h1', 'h2', 'h3'])
+plt.tight_layout()
 
-ax46.title.set_text(r'Task Activation')
+fig8 = plt.figure(8, figsize=(11.5, 1.75))
+ax46 = plt.subplot2grid((1,1), (0,0))
+ax46.plot(t, h1_list, linestyle='-', color='black',  marker='s', markersize=5.0, mew=1.0, markevery=10, label=r'$h_4$ Eye Pitch',linewidth=1.5)
+ax46.plot(t, h2_list, linestyle='--', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label=r'$h_5$ R Eye Yaw',linewidth=1.5)
+ax46.plot(t, h3_list, linestyle='-', color='blue', label=r'$h_6$ L Eye Yaw',linewidth=1.5)
+ax46.legend(['h4', 'h5', 'h6'])
+
+#ax46.title.set_text(r'Task Activation')
 ax46.set_ylim(0.0, 1.1)
-ax46.set_ylabel(r'$h \in [0,1]$')
+ax46.set_ylabel('Task Activation\n $h \in [0,1]$', multialignment='center')
 ax46.set_xlabel(r'Time (s)')
-ax46.legend(loc="lower left", prop={'size': 12})
-#ax46.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-#        ncol=3, mode="expand", borderaxespad=0.)
+ax46.legend(loc="upper right", prop={'size': 12})
+# ax46.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+#       ncol=3, mode="expand", borderaxespad=0., prop={'size':12})
+#ax46.legend(bbox_to_anchor=(0.9, 1), loc=2, borderaxespad=0.)
+
 #ax46.legend(loc="upper right")
 # box = ax46.get_position()
 # ax46.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 # ax46.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
 
-
-
-
 plt.tight_layout()
-
-
 
 #ax23 = fig2.add_subplot(3,1,3)
 #df2 = pd.DataFrame( np.zeros( (3,len(t)) ) )
@@ -314,7 +324,8 @@ plt.tight_layout()
 
 
 plt.show()
-fig4.savefig(data_name + '_gaze_yz' + '.eps', dpi=1000)
-fig5.savefig(data_name + '_gaze_cart_error' + '.eps', dpi=1000)
-fig6.savefig(data_name + '_gaze_multiplots' + '.eps', dpi=1000)
-fig7.savefig(data_name + '_gaze_activations' + '.eps', dpi=1000)
+fig4.savefig(data_name + '_gaze_yz' + '.pdf')
+fig5.savefig(data_name + '_gaze_cart_error' + '.pdf')
+fig6.savefig(data_name + '_gaze_multiplots' + '.pdf')
+fig7.savefig(data_name + '_gaze_joints' + '.pdf')
+fig8.savefig(data_name + '_gaze_activations' + '.pdf')
