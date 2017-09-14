@@ -26,10 +26,10 @@ rc('text', usetex=True)
 
 
 
-data_name = "within_limits"
+#data_name = "within_limits"
 #data_name = "no_intermediate_value"
 #data_name = "no_joint_limits_big_square"
-#data_name = "nice_big_square"
+data_name = "nice_big_square"
 raw_data = "data/" + data_name + ".csv"
 
 global datum_timestamp
@@ -317,4 +317,4 @@ plt.show()
 fig4.savefig(data_name + '_gaze_yz' + '.eps', dpi=1000)
 fig5.savefig(data_name + '_gaze_cart_error' + '.eps', dpi=1000)
 fig6.savefig(data_name + '_gaze_multiplots' + '.eps', dpi=1000)
-
+fig7.savefig(data_name + '_gaze_activations' + '.eps', dpi=1000)
