@@ -6,11 +6,25 @@ import csv
 import matplotlib
 #matplotlib.style.use('ggplot')
 
+
+
+#from matplotlib.font_manager import FontProperties
+
+#fontP = FontProperties()
+#fontP.set_size('small')
+#fontP.set_size(12)
+
 from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+
+matplotlib.rcParams.update({'font.size': 12})
+
+#rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 ## for Palatino and other serif fonts use:
 #rc('font',**{'family':'serif','serif':['Palatino']})
 rc('text', usetex=True)
+
+
+
 
 data_name = "within_limits"
 #data_name = "no_intermediate_value"
@@ -146,117 +160,141 @@ t = np.array(t_list)
 
 fig4 = plt.figure(4)
 ax41 = plt.subplot2grid((1,1), (0,0))
-ax41.plot(head_cur_y, head_cur_z, linestyle='-', color='red', label='Head Y-Z actual',  linewidth=5)
-ax41.plot(head_des_y, head_des_z, linestyle='--', color='orange', label='Head Y-Z desired', linewidth=5)	
+ax41.plot(head_cur_y, head_cur_z, linestyle='-', color='red', label='Head Y-Z actual',  linewidth=1.5)
+ax41.plot(reye_cur_y, reye_cur_z, linestyle='-', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Y-Z actual',  linewidth=1.5)	
 
-ax41.plot(reye_cur_y, reye_cur_z, linestyle='-', color='green', marker='x', markersize=10.0, mew=2.0, markevery=10, label='R Eye Y-Z actual',  linewidth=2.5)	
-ax41.plot(reye_des_y, reye_des_z, linestyle='--', color='green', marker='o', markersize=10.0, mew=2.0, markevery=10, label='R Eye Y-Z desired', linewidth=2.5)	
 
-ax41.plot(leye_cur_y, leye_cur_z, linestyle='-', color='blue', label='L Eye Y-Z actual',  linewidth=2.5)	
-ax41.plot(leye_des_y, leye_des_z, linestyle='--', color='blue', label='L Eye Y-Z desired',  linewidth=2.5)	
+ax41.plot(leye_cur_y, leye_cur_z, linestyle='-', color='blue', label='Left Eye Y-Z actual',  linewidth=1.5)	
+ax41.plot(head_des_y, head_des_z, linestyle='--', color='orange', label='Head Y-Z desired', linewidth=2.5)	
 
-ax41.title.set_text('Gaze Trajectory Visualization (Y-Z plane)')
+ax41.plot(reye_des_y, reye_des_z, linestyle='--', color='green', marker='x', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Y-Z desired', linewidth=1.5)	
+ax41.plot(leye_des_y, leye_des_z, linestyle='--', color='blue', label='Left Eye Y-Z desired',  linewidth=1.5)	
+
+ax41.title.set_text(r'Gaze Trajectory Visualization (Y-Z plane)')
 ax41.set_ylabel(r'Z(m)')
 ax41.set_xlabel(r'Y(m)')
-ax41.legend(['Actual Head Gaze', 'Desired Head Gaze', 'Actual Right Eye Gaze', 'Desired Right Eye Gaze', 'Actual Left Eye Gaze', 'Desired Left Eye Gaze'])
-ax41.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-ax41.set_xlim(-0.6, 0.6)
-ax41.set_ylim(-0.6, 0.75)
-ax41.set_aspect('equal', adjustable='box')
-#ax41.set_aspect('equal', 'datalim')
+ax41.legend([r'Actual Head Gaze', r'Desired Head Gaze', r'Actual Right Eye Gaze', r'Desired Right Eye Gaze', r'Actual Left Eye Gaze', r'Desired Left Eye Gaze'])
+ax41.legend(loc="lower center",ncol=2, prop={'size': 12})
+#ax41.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+ax41.set_xlim(-0.7, 0.7)
+ax41.set_ylim(-0.7, 0.7)
+#ax41.set_aspect('equal', adjustable='box')
+ax41.set_aspect('equal', 'datalim')
 #ax41.axis('equal')
-ax41.grid('on')
+#ax41.grid('on')	
 
+for item in ([ax41.title, ax41.xaxis.label, ax41.yaxis.label] +
+             ax41.get_xticklabels() + ax41.get_yticklabels()):
+    item.set_fontsize(12)
 
+plt.tight_layout()
 
 fig5 = plt.figure(5)
 ax42 = plt.subplot2grid((1,1), (0,0) )
-ax42.plot(t, head_cart_error, linestyle='-', color='red', label='H Gaze Error 2-Norm', linewidth=5)
-ax42.plot(t, reye_cart_error, linestyle='--', marker='x', markersize=10.0, mew=2.0, markevery=15, color='green', label='R Eye Gaze Error 2-Norm', linewidth=5)
-ax42.plot(t, leye_cart_error, linestyle=':', color='blue', label='L Eye Gaze Error 2-Norm', linewidth=5)
+ax42.plot(t, head_cart_error, linestyle='-', color='red', label='Head', linewidth=1.5)
+ax42.plot(t, reye_cart_error, linestyle='--', marker='o', markersize=5.0, mew=1.0, markevery=10, color='green', label='Right Eye', linewidth=1.5)
+ax42.plot(t, leye_cart_error, linestyle='-', color='blue', label='Left Eye', linewidth=1.5)
 
 ax42.set_ylabel(r'Error $||\cdot||_2$')
+ax42.set_ylim(-0.1, 0.4)
 ax42.set_xlabel(r'Time')
 
-ax42.grid('on')
-ax42.title.set_text('Gaze Cartesian Error (2-Norm)')
-#ax21.get_xaxis().set_visible(False)
-ax42.legend(['Head Gaze Error', 'Right Eye Gaze Error', 'Left Eye Gaze Error'])
-ax42.legend(loc="upper right")
+ax42.title.set_text(r'Gaze Cartesian Error (2-Norm)')
+ax42.legend([r'Head Gaze Error', r'Right Eye Gaze Error', r'Left Eye Gaze Error'])
+ax42.legend(loc="lower right",ncol=3, prop={'size': 12})
+
+#box = ax42.get_position()
+#ax42.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+#ax42.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
 plt.tight_layout()
 
 
 fig6 = plt.figure(6)
 
-ax43 = plt.subplot2grid((4,1), (0,0))
-ax43.plot(t, head_cur_y, linestyle='-', color='red', label='Head Gaze Y', linewidth=2.5)
-ax43.plot(t, head_des_y, linestyle='--', color='red', label='Head Des Gaze Y', linewidth=2.5)
-ax43.plot(t, reye_cur_y, linestyle='-', color='green', marker='x', markersize=10.0, mew=2.0, markevery=5, label='Right Eye Act Gaze Y',linewidth=2.5)
-ax43.plot(t, reye_des_y, linestyle='--', color='green', marker='o', markersize=10.0, mew=2.0, markevery=5, label='Right Eye Des Gaze Y',linewidth=2.5)
-ax43.plot(t, leye_cur_y, linestyle='-.', color='blue', label='Left Eye Act Gaze Y',linewidth=2.5)
-ax43.plot(t, leye_des_y, linestyle=':', color='blue', label='Left Eye Des Gaze Y',linewidth=2.5)
+ax43 = plt.subplot2grid((2,2), (0,0))
+ax43.plot(t, head_cur_y, linestyle='-', color='red', label='Head Gaze Y', linewidth=1.5)
+ax43.plot(t, head_des_y, linestyle='--', color='red', label='Head Des Gaze Y', linewidth=1.5)
 
-ax43.title.set_text('Gaze Y Position vs Time')
-ax43.set_ylabel(r'Gaze Y Position (m)',fontsize=12)
-ax43.set_xlabel(r'Time (s)',fontsize=12)
-ax43.grid('on')
-ax43.legend(['H_cur gaze y', 'H_des gaze y','R_cur gaze y', 'R_des gaze y', 'Left Act Y', 'Left Des Y'])
-ax43.legend(loc="lower left", ncol=2)# ax43.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-#        ncol=6, mode="expand", borderaxespad=0.)
+ax43.title.set_text(r'Head Gaze Position')
+ax43.set_ylabel('Y\nPosition (m)', multialignment='center')
+ax43.set_ylim(-0.8, 0.8)
+#ax43.legend(['H_cur gaze y', 'H_des gaze y','R_cur gaze y', 'R_des gaze y', 'Left Act Y', 'Left Des Y'])
+#ax43.legend(loc="lower left", prop={'size': 12})
 
+ax432 = plt.subplot2grid((2,2), (0,1))
+ax432.plot(t, reye_cur_y, linestyle='-', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Act Gaze Y',linewidth=1.5)
+ax432.plot(t, reye_des_y, linestyle='--', color='green', marker='x', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Des Gaze Y',linewidth=1.5)
+ax432.plot(t, leye_cur_y, linestyle='-', color='blue', label='Left Eye Act Gaze Y',linewidth=1.5)
+ax432.plot(t, leye_des_y, linestyle='--', color='blue', label='Left Eye Des Gaze Y',linewidth=1.5)
 
-ax44 = plt.subplot2grid((4,1), (1,0))
-ax44.plot(t, head_cur_z, linestyle='-', color='red', label='Head Gaze Z', linewidth=2.5)
-ax44.plot(t, head_des_z, linestyle='--', color='red', label='Head Des Gaze Z', linewidth=2.5)
-ax44.plot(t, reye_cur_z, linestyle='-', color='green',  marker='x', markersize=10.0, mew=2.0, markevery=5, label='Right Eye Act Gaze Z',linewidth=2.5)
-ax44.plot(t, reye_des_z, linestyle='--', color='green',  marker='o', markersize=10.0, mew=2.0, markevery=5, label='Right Eye Des Gaze Z',linewidth=2.5)
-ax44.plot(t, leye_cur_z, linestyle='-.', color='blue', label='Left Eye Act Gaze Z',linewidth=2.5)
-ax44.plot(t, leye_des_z, linestyle=':', color='blue', label='Left Eye Des Gaze Z',linewidth=2.5)
-ax44.grid('on')
-ax44.title.set_text('Gaze Z Position vs Time')
-ax44.set_ylabel(r'Gaze Z Position (m)',fontsize=12)
-ax44.set_xlabel(r'Time (s)',fontsize=12)
+ax432.title.set_text(r'Eye Gaze Position')
+#ax432.set_ylabel('Gaze Y\nPosition (m)', multialignment='center')
+ax432.set_ylim(-0.3, 0.3)
+
+ax44 = plt.subplot2grid((2,2), (1,0))
+ax44.plot(t, head_cur_z, linestyle='-', color='red', label='Actual Head Gaze', linewidth=1.5)
+ax44.plot(t, head_des_z, linestyle='--', color='red', label='Desired Head Gaze', linewidth=1.5)
+
+# ax44.title.set_text(r'Head Gaze Z Position')
+ax44.set_ylabel('Z\nPosition (m)', multialignment='center')
+ax44.set_ylim(-0.8, 0.8)
 ax44.legend(['H_cur gaze z', 'H_des gaze z', 'R_cur gaze z', 'R_des gaze z'])
-# ax44.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-#        ncol=6, mode="expand", borderaxespad=0.)
-ax44.legend(loc="lower right", ncol=2)
+ax44.legend(loc="lower left", prop={'size': 12})
+ax44.set_xlabel(r'Time (s)',fontsize=12)
+#box = ax44.get_position()
+# ax44.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+# ax44.legend(loc='center left', bbox_to_anchor=(1, 0.5), frameon=False)
 
+ax442 = plt.subplot2grid((2,2), (1,1))
+ax442.plot(t, reye_cur_z, linestyle='-', color='green',  marker='o', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Actual',linewidth=1.5)
+ax442.plot(t, reye_des_z, linestyle='--', color='green',  marker='x', markersize=5.0, mew=1.0, markevery=10, label='Right Eye Desired',linewidth=1.5)
+ax442.plot(t, leye_cur_z, linestyle='-', color='blue', label='Left Eye Actual',linewidth=1.5)
+ax442.plot(t, leye_des_z, linestyle='--', color='blue', label='Left Eye Desired',linewidth=1.5)
 
-ax45 = plt.subplot2grid((4,1), (2,0))
-ax45.plot(t, q4_list, linestyle='-', color='black', label=r'$q_o$ Eye Pitch Joint',linewidth=2.5)
-ax45.plot(t, q5_list, linestyle='--', color='green', marker='x', markersize=10.0, mew=2.0, markevery=5, label=r'$q_1$ Right Eye Yaw',linewidth=2.5)
-ax45.plot(t, q6_list, linestyle=':', color='blue', label=r'$q_2$ Left Eye Yaw',linewidth=2.5)
-ax45.grid('on')
-ax45.title.set_text('Eye Joint Positions vs Time')
-ax45.set_ylabel(r'Joint Position (rads)',fontsize=12)
-ax45.set_xlabel(r'Time (s)',fontsize=12)
+#plt.title(r'Eye Gaze Position')
+#ax442.set_ylabel('Z\nPosition (m)', multialignment='center')
+ax442.set_ylim(-0.3, 0.3)
+ax442.legend(loc="lower left", ncol=1, prop={'size': 12})
 
-ax45.legend(['Eye Pitch', 'R Eye Yaw', 'L Eye Yaw'])
-# ax45.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-#        ncol=3, mode="expand", borderaxespad=0.)
-ax45.legend(loc="upper right")
+# box = ax442.get_position()
+# ax442.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+# ax442.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-ax46 = plt.subplot2grid((4,1), (3,0))
-ax46.plot(t, h1_list, linestyle='-', color='black', label=r'$h_1$ Eye Pitch Activation Value',linewidth=2.5)
-ax46.plot(t, h2_list, linestyle='--', color='green', marker='x', markersize=10.0, mew=2.0, markevery=5, label=r'$h_2$ Right Eye Yaw Activation Value',linewidth=2.5)
-ax46.plot(t, h3_list, linestyle=':', color='blue', label=r'$h_3$ Left Eye Yaw Activation Value',linewidth=2.5)
-ax46.grid('on')
+fig7 = plt.figure(7)
+ax45 = plt.subplot2grid((2,1), (0,0), colspan=2)
+ax45.plot(t, q4_list, linestyle='-', color='black', marker='s', markersize=5.0, mew=1.0, markevery=10, label=r'$q_o$ Eye Pitch Joint',linewidth=1.5)
+ax45.plot(t, q5_list, linestyle='--', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label=r'$q_1$ Right Eye Yaw',linewidth=1.5)
+ax45.plot(t, q6_list, linestyle='-', color='blue', label=r'$q_2$ Left Eye Yaw',linewidth=1.5)
+ax45.title.set_text(r'Eye Joint Positions')
+ax45.set_ylabel('Joint\nPosition (rads)', multialignment='center')
+ax45.set_ylim(-0.7, 0.7)
+
+ax45.legend(loc="lower left", prop={'size': 12})
+
+ax46 = plt.subplot2grid((2,1), (1,0))
+ax46.plot(t, h1_list, linestyle='-', color='black',  marker='s', markersize=5.0, mew=1.0, markevery=10, label=r'$h_1$ Eye Pitch Activation Value',linewidth=1.5)
+ax46.plot(t, h2_list, linestyle='--', color='green', marker='o', markersize=5.0, mew=1.0, markevery=10, label=r'$h_2$ Right Eye Yaw Activation Value',linewidth=1.5)
+ax46.plot(t, h3_list, linestyle='-', color='blue', label=r'$h_3$ Left Eye Yaw Activation Value',linewidth=1.5)
 ax46.legend(['h1', 'h2', 'h3'])
 
-ax46.title.set_text('Task Activation vs Time')
-ax46.set_ylabel(r'$h \in [0,1]$',fontsize=12)
-ax46.set_xlabel(r'Time (s)',fontsize=12)
-ax46.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-        ncol=3, mode="expand", borderaxespad=0.)
+ax46.title.set_text(r'Task Activation')
+ax46.set_ylim(0.0, 1.1)
+ax46.set_ylabel(r'$h \in [0,1]$')
+ax46.set_xlabel(r'Time (s)')
+ax46.legend(loc="lower left", prop={'size': 12})
+#ax46.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+#        ncol=3, mode="expand", borderaxespad=0.)
 #ax46.legend(loc="upper right")
+# box = ax46.get_position()
+# ax46.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+# ax46.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
 
 
 
 
-
-#plt.tight_layout()
+plt.tight_layout()
 
 
 
@@ -276,8 +314,7 @@ ax46.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
 
 
 plt.show()
-fig4.savefig(data_name + '_gaze_yz' + '.png')
-fig5.savefig(data_name + '_gaze_cart_error' + '.png')
-fig6.savefig(data_name + '_gaze_multiplots' + '.png')
-
+fig4.savefig(data_name + '_gaze_yz' + '.eps', dpi=1000)
+fig5.savefig(data_name + '_gaze_cart_error' + '.eps', dpi=1000)
+fig6.savefig(data_name + '_gaze_multiplots' + '.eps', dpi=1000)
 
